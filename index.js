@@ -4,6 +4,8 @@ const port = 80;
 const conn = require("./database/database");
 const categoriesController = require("./categories/controller/CategoriesController");
 const articlesController = require("./atricles/controller/ArticlesController");
+const Article = require("./atricles/model/Article");
+const Category = require("./categories/model/Category");
 
 app.set("view engine", "ejs");
 
