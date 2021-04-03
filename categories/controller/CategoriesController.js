@@ -9,11 +9,12 @@ router.get("/categories", (req, res) =>{
 
 router.get("/admin/categories/new", (req, res) =>{
     res.render("admin/categories/new");
-
 });
 
 router.get("/admin/categories", (req, res) =>{
-    res.render("admin/categories/index");
+    Category.findAll().then((categories) =>{
+        res.render("admin/categories/index",{categories});
+    });    
 });
 
 router.post("/categories/save", (req, res) =>{
@@ -28,7 +29,6 @@ router.post("/categories/save", (req, res) =>{
     } else {
         res.redirect("/admin/categories/new")
     }
-
 });
 
 module.exports = router;
