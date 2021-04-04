@@ -24,11 +24,27 @@ router.post("/categories/save", (req, res) =>{
             title: title,
             slug: slugify(title)
         }).then(() =>{
-            res.redirect("admin/categories/index");
+            res.redirect("/admin/categories");
         })
     } else {
         res.redirect("/admin/categories/new")
     }
+});
+
+router.post("/categories/delete", (req, res) => {
+    var id = req.body.id;
+    if(id != undefined){
+        if(!isNaN(id)){
+            Category.destroy({
+                where: {id}
+            }).then(() =>{
+                res.redirect("/admin/categories");
+            }).catch((error) =>{
+                console.log(error);
+                res.redirect("/admin/categories");
+            });
+        } else { "/admin/categories" };
+    } else { "/admin/categories" };
 });
 
 module.exports = router;
