@@ -17,6 +17,19 @@ router.get("/admin/categories", (req, res) =>{
     });    
 });
 
+router.get("/admin/categories/edit/:id", (req, res) =>{
+    var id = req.params.id;
+    if(isNaN(id)){ res.redirect("/admin/categories"); }
+    Category.findByPk(id).then((categoria) =>{
+        if(categoria != undefined) {
+            res.render("admin/categories/edit", {categoria: categoria});
+        } else { res.redirect("/admin/categories"); }
+    }).catch((error) =>{
+        res.redirect("/admin/categories");
+    });
+});
+
+
 router.post("/categories/save", (req, res) =>{
     var title = req.body.title;
     if(title != undefined){
