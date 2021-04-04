@@ -56,8 +56,20 @@ router.post("/categories/delete", (req, res) => {
                 console.log(error);
                 res.redirect("/admin/categories");
             });
-        } else { "/admin/categories" };
-    } else { "/admin/categories" };
+        } else { res.redirect("/admin/categories"); };
+    } else { res.redirect("/admin/categories"); };
+});
+
+router.post("/categories/update", (req, res) =>{
+    var id = req.body.id;
+    var title = req.body.title;
+    Category.update({
+        title: title,
+        slug: slugify(title)
+    }, {where: {id: id}}).then(() =>{
+        res.redirect("/admin/categories");
+    })
+
 });
 
 module.exports = router;
