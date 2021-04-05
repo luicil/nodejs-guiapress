@@ -18,6 +18,22 @@ router.get("/admin/articles/new", (req, res) =>{
     });
 });
 
+router.get("/articles/delete/:id", (req, res) => {
+    var id = req.params.id;
+    if(id != undefined){
+        if(!isNaN(id)){
+            Article.destroy({
+                where: {id}
+            }).then(() =>{
+                res.redirect("/admin/articles");
+            }).catch((error) =>{
+                console.log(error);
+                res.redirect("/admin/articles");
+            });
+        } else { res.redirect("/admin/articles"); };
+    } else { res.redirect("/admin/articles"); };
+});
+
 router.post("/articles/save", (req, res) =>{
     var title = req.body.title;
     var artigo = req.body.artigo;
@@ -29,8 +45,9 @@ router.post("/articles/save", (req, res) =>{
         categoryId: catID
     }).then(() =>{
         res.redirect("/admin/articles");
+    }).catch((err) =>{
+        res.redirect("/admin/articles");
     });
-
 });
 
 module.exports = router;

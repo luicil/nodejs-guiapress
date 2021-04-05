@@ -18,17 +18,17 @@
                     </tr>
                 </thead>
                 <tbody>
-
                     <% articles.forEach(article => { %>
                         <tr>
                             <td><%= article.id %></td>
                             <td><%= article.title %></td>
                             <td><%= article.slug %></td>
                             <td><%= article.category.title %></td>
-                            <td>Ações</td>               
+                            <td>
+                                <a id="deleteArtigo" href="/articles/delete/<%= article.id %>" class="btn btn-danger" onclick="confDel(event, this)">Excluir</a>
+                            </td>               
                         </tr>
                     <% }); %>
-                
                 </tbody>
             </table>
         </div>
@@ -37,8 +37,8 @@
 <script>
     function confDel(event, form){
         event.preventDefault();
-        if(confirm("Deseja realmente excluir a categoria ?")){
-            form.submit();
+        if(confirm("Deseja realmente excluir o artigo ?")){
+            window.location.replace(document.getElementById("deleteArtigo").href);
         }
     };
 </script>      
