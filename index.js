@@ -7,6 +7,8 @@ const articlesController = require("./atricles/controller/ArticlesController");
 const Article = require("./atricles/model/Article");
 const Category = require("./categories/model/Category");
 
+const pLimit = 2;
+
 app.set("view engine", "ejs");
 
 app.use(express.urlencoded({extended: false}));
@@ -33,7 +35,8 @@ app.get("/:slug?", (req, res) =>{
     });
     if(slug == undefined){
         Article.findAll({
-            order: [["id", "DESC"]]
+            order: [["id", "DESC"]],
+            limit: pLimit
         }).then((articles) =>{
             res.render("index",{ articles, categories: cats });
         });

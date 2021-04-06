@@ -58,17 +58,19 @@ router.get("/admin/articles/edit/:id", (req, res) =>{
 router.get("/articles/page/:num", (req, res) =>{
     const pLimit = 2;
     var page = parseInt(req.params.num);
-    var pOffset = (page == 1 ? 0 : page * pLimit);
+    var pOffset = (page == 1 ? 0 : ((page -1) * pLimit));
 
     Article.findAndCountAll({
         limit: pLimit,
-        offset: pOffset
+        offset: pOffset,
+        order: [["id", "DESC"]]
     }).then((articles) =>{
         var next = true;
         if(pOffset + pLimit >= articles.count){
             next = false;
         }
         var result = {
+            page: page,
             next: next,
             articles: articles
         }
