@@ -4,6 +4,8 @@ const Category = require("../../categories/model/Category");
 const Article = require("../../atricles/model/Article");
 const slugify = require("slugify");
 
+//#region GET
+
 router.get("/admin/articles", (req, res) =>{
     Article.findAll({
         include:[{model: Category}]
@@ -34,6 +36,10 @@ router.get("/articles/delete/:id", (req, res) => {
     } else { res.redirect("/admin/articles"); };
 });
 
+//#endregion
+
+//#region POST
+
 router.post("/articles/save", (req, res) =>{
     var title = req.body.title;
     var artigo = req.body.artigo;
@@ -49,5 +55,7 @@ router.post("/articles/save", (req, res) =>{
         res.redirect("/admin/articles");
     });
 });
+
+//#endregion
 
 module.exports = router;

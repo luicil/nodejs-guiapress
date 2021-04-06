@@ -25,9 +25,29 @@ conn
         console.log("Falha de acesso ao banco: " + error);
     });
 
-app.get("/", (req, res) =>{
-    res.render("index");
+app.get("/:slug?", (req, res) =>{
+    var slug = req.params.slug;
+    if(slug == undefined){
+        Article.findAll({
+            order: [["id", "DESC"]]
+        }).then((articles) =>{
+            res.render("index",{articles});
+        });
+    } else {
+        Article.findOne({
+            where: { slug }
+        }).then((article) =>{
+            if(article != undefined){
+                res.render("article",{ article });
+            } else {
+                res.render("/");
+            }
+        });
+
+    }
 });
+
+
 
 app.listen(port,(err) =>{
     if(err){
