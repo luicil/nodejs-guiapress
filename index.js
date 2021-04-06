@@ -27,27 +27,48 @@ conn
 
 app.get("/:slug?", (req, res) =>{
     var slug = req.params.slug;
+    var cats = null;
+    Category.findAll().then((categories) =>{
+        cats = categories;
+    });
     if(slug == undefined){
         Article.findAll({
             order: [["id", "DESC"]]
         }).then((articles) =>{
-            res.render("index",{articles});
+            res.render("index",{ articles, categories: cats });
         });
     } else {
         Article.findOne({
             where: { slug }
         }).then((article) =>{
             if(article != undefined){
-                res.render("article",{ article });
+                res.render("article",{ article, categories: cats });
             } else {
                 res.render("/");
             }
         });
-
     }
 });
 
-
+app.get("/category/:slug", (req, res) => {
+    var slug = req.params.slug;
+    Category.findOne({
+        where: { slug },
+        include: [{ model: Article }]
+    }).then((category) =>{
+        if(category != undefined){
+            Category.findAll().then((categories) =>{
+                res.render("index",{ articles: category.articles, categories });
+            }).catch((error) =>{
+                res.render("/");
+            });
+        } else {
+            res.render("/");
+        };
+    }).catch((error) =>{
+        res.render("/");
+    })
+});
 
 app.listen(port,(err) =>{
     if(err){
