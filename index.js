@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const port = 80;
 const pLimit = 2;
+const session = require("express-session");
 const conn = require("./database/database");
 const categoriesController = require("./categories/controller/CategoriesController");
 const articlesController = require("./atricles/controller/ArticlesController");
@@ -15,6 +16,12 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(express.static("public"));
+app.use(session({
+    secret: "luicil",
+    cookie:{
+        maxAge: 30000 // 30 segundos
+    }
+}));
 
 app.use("/", categoriesController);
 app.use("/", articlesController);
