@@ -1,13 +1,14 @@
 const express = require("express");
 const app = express();
 const port = 80;
+const pLimit = 2;
 const conn = require("./database/database");
 const categoriesController = require("./categories/controller/CategoriesController");
 const articlesController = require("./atricles/controller/ArticlesController");
+const usersController = require("./users/controller/UsersController");
 const Article = require("./atricles/model/Article");
 const Category = require("./categories/model/Category");
-
-const pLimit = 2;
+const User = require("./users/model/User");
 
 app.set("view engine", "ejs");
 
@@ -17,6 +18,7 @@ app.use(express.static("public"));
 
 app.use("/", categoriesController);
 app.use("/", articlesController);
+app.use("/", usersController);
 
 conn
     .authenticate()
@@ -46,9 +48,9 @@ app.get("/:slug?", (req, res) =>{
         }).then((article) =>{
             if(article != undefined){
                 res.render("article",{ article, categories: cats });
-            } else {
-                res.render("/");
-            }
+            } //else {
+                //res.render("/");
+            //}
         });
     }
 });
