@@ -13,9 +13,37 @@ router.get("/admin/users", (req, res) =>{
 
 router.get("/admin/users/create/:email?", (req, res) =>{
     var email = req.params.email;
-
-
     res.render("admin/users/create", { email });
+});
+
+router.get("/login/:loginFail?", (req, res) =>{
+    var loginFail = req.params.loginFail;
+    res.render("admin/users/login", ({ loginFail }));
+});
+
+router.post("/users/login", (req, res) =>{
+    var email = req.body.email;
+    var password = req.body.password;
+    User.findOne({
+        where: { email }
+    }).then((user) =>{
+        if(user != undefined){
+            var ret = bcryptjs.compareSync(password, user.password);
+            if(ret){
+                req.session.user = {
+                    id: user.id,
+                    email: user.email
+                };
+                res.json(req.session.user);
+            } else {
+                res.redirect("/login/true");
+            };
+        } else {
+            res.redirect("/login/true");
+        }
+    }).catch((error) =>{
+        res.redirect("/login/true");
+    });
 });
 
 router.post("/users/create", (req, res) =>{

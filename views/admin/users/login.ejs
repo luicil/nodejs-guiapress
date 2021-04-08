@@ -1,0 +1,39 @@
+<%- include("../../partials/header.ejs") %>
+<%- include("../../partials/navbar.ejs") %>
+    <body>
+        <div class="container">
+           <br>
+            <div class="card mt = 4">
+                <div class="card-header">
+                    <h2>Login de usuário</h2>
+                </div>
+
+                <% if(loginFail != undefined) { %>
+                    <br>
+                    <div id = "div_alert" class="alert alert-danger" role="alert">
+                        <h3>Usuário ou senha incorretos</h3>
+                    </div>    
+                <% } %>
+
+                <div class="card-body">
+                    <form method="POST" action="/users/login">
+                        <label>Email:</label>
+                        <input type="email" class="form-control" name="email" placeholder="exemplo@exemplo.com">
+                        <label>Senha:</label>
+                        <input type="password" class="form-control" name="password" placeholder="*****">
+                        <br>
+                        <button class="btn btn-primary btn-block" type="submit">Logar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+<%- include("../../partials/footer.ejs") %>
+         
+<script>
+    $(document).ready(() =>{
+        $("#div_alert").fadeTo(4000, 500).slideUp(500, function(){
+            $("#div_alert").slideUp(500);
+        });
+    });
+</script>
