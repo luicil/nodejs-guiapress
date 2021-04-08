@@ -7,6 +7,14 @@
                 <div class="card-header">
                     <h2>Criação de usuário</h2>
                 </div>
+
+                <% if(email != undefined) { %>
+                    <br>
+                    <div id = "div_alert" class="alert alert-warning" role="alert">
+                        O email: <h3><%= email %></h3> já está cadastrado !
+                    </div>    
+                <% } %>
+
                 <div class="card-body">
                     <form method="POST" action="/users/create">
                         <label>Email:</label>
@@ -21,3 +29,11 @@
         </div>
     </body>
 <%- include("../../partials/footer.ejs") %>
+
+<script>
+    $(document).ready(() =>{
+        $("#div_alert").fadeTo(4000, 500).slideUp(500, function(){
+            $("#div_alert").slideUp(500);
+        });
+    });
+</script>            

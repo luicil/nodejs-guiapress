@@ -17,10 +17,13 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(express.static("public"));
 app.use(session({
+    name: "guiapress",
     secret: "luicil",
     cookie:{
         maxAge: 30000 // 30 segundos
-    }
+    },
+    resave: true,
+    saveUninitialized: true
 }));
 
 app.use("/", categoriesController);

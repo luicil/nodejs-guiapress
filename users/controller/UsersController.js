@@ -11,8 +11,11 @@ router.get("/admin/users", (req, res) =>{
     })
 });
 
-router.get("/admin/users/create", (req, res) =>{
-    res.render("admin/users/create");
+router.get("/admin/users/create/:email?", (req, res) =>{
+    var email = req.params.email;
+
+
+    res.render("admin/users/create", { email });
 });
 
 router.post("/users/create", (req, res) =>{
@@ -33,7 +36,7 @@ router.post("/users/create", (req, res) =>{
                 res.redirect("/");
             });
         } else {
-            res.redirect("/users/create");
+            res.render("admin/users/create", { email });
         }
     });
 });
