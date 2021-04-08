@@ -16,6 +16,7 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(express.static("public"));
+
 app.use(session({
     name: "guiapress",
     secret: "luicil",
@@ -26,10 +27,6 @@ app.use(session({
     saveUninitialized: true
 }));
 
-app.use("/", categoriesController);
-app.use("/", articlesController);
-app.use("/", usersController);
-
 conn
     .authenticate()
     .then(() =>{
@@ -39,8 +36,38 @@ conn
         console.log("Falha de acesso ao banco: " + error);
     });
 
+//#region Routes
+
+app.use("/", categoriesController);
+app.use("/", articlesController);
+app.use("/", usersController);
+
+
+
+app.get("/category/:slug", (req, res) => {
+    var slug = req.params.slug;
+    Category.findOne({
+        where: { slug },
+        include: [{ model: Article }]
+    }).then((category) =>{
+        if(category != undefined){
+            Category.findAll().then((categories) =>{
+                res.render("index",{ articles: category.articles, categories });
+            }).catch((error) =>{
+                res.render("/");
+            });
+        } else {
+            res.render("/");
+        };
+    }).catch((error) =>{
+        res.render("/");
+    })
+});
+
+// TEM QUE FICAR NO FIM POR CAUSA DO PARAMETRO
 app.get("/:slug?", (req, res) =>{
     var slug = req.params.slug;
+    console.log(slug);
     var cats = null;
     Category.findAll().then((categories) =>{
         cats = categories;
@@ -65,25 +92,7 @@ app.get("/:slug?", (req, res) =>{
     }
 });
 
-app.get("/category/:slug", (req, res) => {
-    var slug = req.params.slug;
-    Category.findOne({
-        where: { slug },
-        include: [{ model: Article }]
-    }).then((category) =>{
-        if(category != undefined){
-            Category.findAll().then((categories) =>{
-                res.render("index",{ articles: category.articles, categories });
-            }).catch((error) =>{
-                res.render("/");
-            });
-        } else {
-            res.render("/");
-        };
-    }).catch((error) =>{
-        res.render("/");
-    })
-});
+//#endregion Routes
 
 app.listen(port,(err) =>{
     if(err){
