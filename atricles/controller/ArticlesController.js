@@ -3,10 +3,12 @@ const router = express.Router();
 const Category = require("../../categories/model/Category");
 const Article = require("../../atricles/model/Article");
 const slugify = require("slugify");
+const adminAuth = require("../../middlewares/adminAuth");
 
 //#region GET
 
-router.get("/admin/articles", (req, res) =>{
+// Plugar o middleware adminAuth em toda rota que precisar de autenticação
+router.get("/admin/articles", adminAuth, (req, res) =>{
     Article.findAll({
         include:[{model: Category}],
         order: [["id", "DESC"]]

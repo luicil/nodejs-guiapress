@@ -21,6 +21,11 @@ router.get("/login/:loginFail?", (req, res) =>{
     res.render("admin/users/login", ({ loginFail }));
 });
 
+router.get("/logout", (req, res) =>{
+    req.session.user = undefined;
+    res.redirect("/");
+});
+
 router.post("/users/login", (req, res) =>{
     var email = req.body.email;
     var password = req.body.password;
@@ -34,7 +39,9 @@ router.post("/users/login", (req, res) =>{
                     id: user.id,
                     email: user.email
                 };
+
                 res.json(req.session.user);
+                
             } else {
                 res.redirect("/login/true");
             };
